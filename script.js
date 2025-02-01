@@ -5,6 +5,9 @@ let direction = 1; // 1 = right, -1 = left
 
 document.addEventListener("DOMContentLoaded", loadWishes); // Load wishes when page loads
 
+// Initialize EmailJS with your public key
+emailjs.init("nIqNSrBXuJ895krcI"); // Replace with your actual EmailJS public key
+
 function createSunflower(id) {
   sunflowerCount++;
   const sunflower = document.createElement("div");
@@ -72,10 +75,30 @@ function createSunflower(id) {
   });
 }
 
+function sendWishEmail(wishText) {
+  const templateParams = {
+    to_email: "n0teinquires@gmail.com", // Replace with your email
+    from_name: "Ankita", // You can customize this
+    message: wishText,
+  };
+
+  emailjs.send("service_qaql9hr", "template_bfyqktc", templateParams).then(
+    (response) => {
+      console.log("Email sent successfully!", response.status, response.text);
+    },
+    (error) => {
+      console.error("Failed to send email.", error);
+    }
+  );
+}
+
 function addWish() {
   const input = document.getElementById("wish-input");
   const wish = input.value.trim();
   if (!wish) return;
+
+  // Send email with the new wish
+  sendWishEmail(wish);
 
   input.value = "";
 
